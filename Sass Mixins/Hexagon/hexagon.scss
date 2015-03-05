@@ -1,0 +1,102 @@
+@mixin hexagon($name, $size, $background, $border, $rotate: 0) {
+	@if $border {
+		$borderWidth: 	nth($border, 1);
+		$borderColour: 	nth($border, 2);
+		$borderStyle: 	nth($border, 3);
+		$border: $borderWidth + px $borderColour $borderStyle;
+	} @else {
+		$borderWidth: 0;
+	}
+
+	$scaleFactor: 	tan( (30 * $PI)/180 );
+	$height: 		round($size/sqrt(3));
+	$capWidth: 		round($size/sqrt(2));
+	$offset: 		round($capWidth/2);
+	$left: 			round(($size - $capWidth)/2 - $borderWidth);
+
+	@if $rotate {
+		.#{$name} {
+			position: relative;
+			height: $size + px;
+			width: $height + px;
+			margin: 0 $height/2 + px;
+			@if $background {
+			  background-color: $background;
+			}
+			@if $border {
+			  border-top: $border;
+			  border-bottom: $border;
+			}
+		}
+
+		.#{$name}:before,
+		.#{$name}:after {
+			content: "";
+			position: absolute;
+			z-index: 1;
+			width: $capWidth + px;
+			height: $capWidth + px;
+			-webkit-transform: scaleX($scaleFactor) rotate(-45deg);
+			-ms-transform: scaleX($scaleFactor) rotate(-45deg);
+			transform: scaleX($scaleFactor) rotate(-45deg);
+			background-color: inherit;
+			top: $left + px;
+			//{{shadowRule()}}
+		}
+
+		.#{$name}:before {
+			left: -$offset +  px;
+			border-top: $border;
+			border-left: $border;
+		}
+
+		.#{$name}:after {
+			right: -$offset + px;
+			border-right: $border;
+			border-bottom: $border;
+		}
+	} @else {
+		.#{$name} {
+			position: relative;
+			width: $size + px;
+			height: $height + px;
+			margin: $height/2 + px 0;
+			@if $background {
+			  background-color: $background;
+			}
+			@if $border {
+			  border-right: $border;
+			  border-left: $border;
+			}
+			//{{shadowRule()}}
+		}
+
+		.#{$name}:before,
+		.#{$name}:after {
+			content: "";
+			position: absolute;
+			z-index: 1;
+			width: $capWidth + px;
+			height: $capWidth + px;
+			-webkit-transform: scaleY($scaleFactor) rotate(-45deg);
+			-ms-transform: scaleY($scaleFactor) rotate(-45deg);
+			transform: scaleY($scaleFactor) rotate(-45deg);
+			background-color: inherit;
+			left: $left + px;
+			//{{shadowRule()}}
+		}
+
+		.#{$name}:before {
+			top: -$offset +  px;
+			border-top: $border;
+			border-right: $border;
+		}
+
+		.#{$name}:after {
+			bottom: -$offset + px;
+			border-left: $border;
+			border-bottom: $border;
+		}
+	}
+
+}
